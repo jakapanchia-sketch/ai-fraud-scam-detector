@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scam Shield AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <div class="brand">
+        <div class="logo">🛡</div>
+        <div>
+            <h1>Scam Shield AI</h1>
+            <p>ระบบช่วยวิเคราะห์ข้อความและข้อมูลต้องสงสัย</p>
+        </div>
+    </div>
+    <div class="status">● ระบบพร้อมใช้งาน</div>
+</header>
+
+<main>
+    <section class="intro">
+        <h2>ตรวจสอบความเสี่ยงจากการหลอกลวง</h2>
+        <p>ส่งข้อความหรือข้อมูลที่ต้องการตรวจสอบ ระบบจะวิเคราะห์รูปแบบที่น่าสงสัยและประเมินระดับความเสี่ยงเบื้องต้น</p>
+    </section>
+
+    <section class="steps">
+        <div class="step"><b>1</b>เลือกประเภทข้อมูล</div>
+        <div class="step"><b>2</b>กรอกหรืออัปโหลด</div>
+        <div class="step"><b>3</b>วิเคราะห์ข้อมูล</div>
+        <div class="step"><b>4</b>คำนวณคะแนน</div>
+        <div class="step"><b>5</b>แสดงผลวิเคราะห์</div>
+    </section>
+
+    <div class="layout">
+        <section class="card">
+            <h3>ข้อมูลที่ต้องการตรวจสอบ</h3>
+            <p class="sub">เลือกประเภทข้อมูลและใส่รายละเอียด</p>
+
+            <label>1. เลือกประเภทข้อมูล</label>
+            <div class="types">
+                <label class="type">
+                    <input type="radio" name="kind" value="ข้อความ" checked>
+                    💬<br>ข้อความ
+                </label>
+                <label class="type">
+                    <input type="radio" name="kind" value="ภาพแนบ">
+                    🖼️<br>ภาพแนบ
+                </label>
+                <label class="type">
+                    <input type="radio" name="kind" value="สลิปการโอนเงิน">
+                    🧾<br>สลิปการโอนเงิน
+                </label>
+            </div>
+
+            <label>2. ข้อความหรือรายละเอียด</label>
+            <textarea id="message" placeholder="วางข้อความที่ต้องการตรวจสอบ..."></textarea>
+
+            <div class="row2">
+                <div>
+                    <label>ชื่อผู้ส่ง / บัญชีผู้ส่ง</label>
+                    <input id="sender" placeholder="ชื่อบัญชีหรือเบอร์โทร">
+                </div>
+                <div>
+                    <label>จำนวนเงิน</label>
+                    <input id="amount" type="number" min="0" placeholder="ระบุจำนวนเงิน">
+                </div>
+            </div>
+
+            <label>3. อัปโหลดภาพหรือสลิป</label>
+            <div class="filebox">
+                📎 เลือกไฟล์ JPG, PNG หรือ WEBP
+                <input id="file" type="file" accept="image/png,image/jpeg,image/webp">
+                <div id="fileName">ยังไม่ได้เลือกไฟล์</div>
+                <img id="preview" alt="ภาพตัวอย่าง" style="display:none; max-width:100%; max-height:160px; margin-top:10px; border-radius:8px;">
+            </div>
+
+            <p class="hint">ระบบจะนำรูปภาพส่งให้ Gemini AI อ่านและวิเคราะห์ความเสี่ยง</p>
+
+            <button class="primary" id="analyze" type="button">
+                🔍 วิเคราะห์ความเสี่ยง
+            </button>
+
+            <p class="hint">โปรดปกปิดข้อมูลส่วนตัวสำคัญก่อนส่งข้อมูล</p>
+        </section>
+
+        <section class="card">
+            <h3>ผลการวิเคราะห์</h3>
+            <p class="sub">คะแนนความเสี่ยง เหตุผล และคำแนะนำ</p>
+
+            <div class="result-placeholder" id="placeholder">
+                <div>
+                    <div class="shield">🛡️</div>
+                    <strong>ยังไม่มีผลการวิเคราะห์</strong>
+                    <p>กรอกข้อมูลหรือแนบภาพทางด้านซ้าย แล้วกดวิเคราะห์</p>
+                </div>
+            </div>
+
+            <div class="result" id="result">
+                <div class="scoreline">
+                    <div class="gauge" id="gauge">
+                        <strong id="score">0</strong>
+                    </div>
+                    <div>
+                        <div class="risk" id="risk">ความเสี่ยงต่ำ</div>
+                        <p class="sub">คะแนนความเสี่ยงจาก 0–100</p>
+                        <div id="kindTag"></div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h4>เหตุผลและจุดที่ตรวจพบ</h4>
+                    <ul class="list" id="reasons"></ul>
+                </div>
+
+                <div class="section">
+                    <h4>คำแนะนำในการดำเนินการ</h4>
+                    <ul class="list" id="advice"></ul>
+                </div>
+
+                <div class="warning">
+                    ผลนี้เป็นการประเมินเบื้องต้นโดย AI ไม่ใช่การยืนยันทางกฎหมายว่าบุคคลหรือธุรกรรมเป็นมิจฉาชีพ
+                </div>
+
+                <div class="actions">
+                    <button class="secondary" id="newCheck" type="button">ตรวจสอบใหม่</button>
+                    <button class="secondary" id="print" type="button">พิมพ์รายงาน</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section class="card history">
+        <div class="history-head">
+            <div>
+                <h3>ประวัติการตรวจสอบ</h3>
+                <p class="sub">บันทึกผลการตรวจสอบในเบราว์เซอร์</p>
+            </div>
+            <button class="secondary" id="clearHistory" type="button">ล้างประวัติ</button>
+        </div>
+        <div class="history-list" id="history">
+            <div class="empty">ยังไม่มีประวัติการตรวจสอบ</div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    Scam Shield AI · Prototype สำหรับการศึกษา
+</footer>
+
+<!-- มีแค่บรรทัดนี้บรรทัดเดียว ห้ามใส่โค้ด JS ด้านในนี้เด็ดขาด -->
+<script src="script.js"></script>
+</body>
+</html>
